@@ -1,0 +1,23 @@
+sudo: required
+language: ruby
+services:
+- docker
+env:
+  global:
+  - IMAGE_NAME=ringcentral/ads-executor
+  - secure: EQQ0euEL9RTle43kc02AKToTOSj6s5FG13Fy/pwJ7G3CswnwpS2tvn/MQV77OJjkpsFjbT72LJUtYf/87rOWeEwzr5xhWZXiG/TppBm7iNLjr+ls3qti/dPwlo0s/pCKwhnW5TXRoBGo0hB1t3eN9YW7NZOdFIqA6yL7ncG24ItmDb9K9HMkG7meuMW6IcajMYg5h7dnDPEfRsGM84WqVC//L9qiG1IE7J5jfPp8begk+ipegB9+kCEUd94eYdDjhuPpVjV08eQfMhrlZJ6ZeCxpOBj8FXLkv53lUkByWkuFiUvwQKkHbc/iertqdQmM8Y83CfRJ/CK2/P7fBpLCpgynz/gD4e96pPolcMg5y16ywWH1IcGNqv9/IlM1KyA+qknsGs8/KEV09N5Q8QLW2vhEPrWBz2NHbpbSy9RWwxlGIDR09ZKe4xnW6UaI0XuRuQdpeTVyp57EUjqIeFHDZseizB57gRy5SlqrOy5VNiUdWj5yAsVJuMtZbxYVrJ89gbh2xMtgss+Uzilv48zUJ5cNG0kMqVZyvht4gTpiKaLtS5qI94od3fG9FJzd7p8z6+FMXbVkgXAReQL/ED+kWB+3uXQ7p5cykzG3i3qbsI19CrYMPTiX3aodUIE7cADeUXsbpEtncWT4oR3Z+u51uGmkuqLNwAFreGXLve0iBys=
+  - secure: J3xerqC2q3oYxNzvHOXWPx1nCvYrStf0wQnsbPUAlCYYz6sofIK1DZB4hEEwpZk8UY6Cjkj3Ys7A3gHvVxgPru+dBxpHI6HaPjeHnD2xbwxN4c5edYQSMbr5ROay8koUT0XWB0KsP5B+Le6tPpzxAxCVXrdUDUOJmcfT8aQDuMH+8l0NXU2jFLxcD1lIbJEfqD8fS15fSuptPzasVaFiLaiwM2oOINDmNTPLgYMaYWUSC31qasXFJnl4oH0qWoAJW7tI5hvWeoUR5ZlBSw2rlsAALaHQTd8rV1lEwYcHhpbBUIlaQkOOtQddfuflRSV9CEuLs984QO9BY9OSG5sAI166zk0s/vTgmC6jmGAdY/v+boykjRl8KIEoQoBg9cBbh8eGY4YtiCyd9/eVt3guubQe9dvECUQpnpbE56kil5TAhZ9dx7+pkTRpP8cm18xvnjPD7MwH5wQj+3Q2k85PTebPqvfRQztSzKSAuDEfuvTU7ZLBNIr6jY08+Zi+Hcy0Cj0NAPPpdrLtPP1cdY65Rfli7DxVQgO9ZVL8u4BspwbK4/GK1mgq3DYVqXW+V7o2nYgwwKlZ2vGHORDGA3Bguc/TYpdlMpeaBjU3QhCZKgE1OFfohS7pgeA1sQwanObmtlXMKtPSPnIoEycd+GFfCid1B6LU3suZ9WwokJU8uvU=
+before_script:
+- version="$(awk -F '[:]' '/FROM/ {print $2}' Dockerfile)"
+script:
+- docker build -t "$IMAGE_NAME" .
+after_script:
+- docker images
+before_deploy:
+- echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin
+- docker tag "$IMAGE_NAME" "${IMAGE_NAME}:${version}"
+deploy:
+  provider: script
+  script: docker push "${IMAGE_NAME}:${version}"
+  on:
+    branch: master
