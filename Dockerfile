@@ -1,4 +1,4 @@
-FROM ringcentral/node:10.16.0-jdk8u202
+FROM ringcentral/node:12.10.0-jdk8u202
 LABEL maintainer="john.lin@ringcentral.com"
 
 ADD ./libs/*.zip /tmp/
