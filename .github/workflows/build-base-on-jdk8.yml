@@ -6,7 +6,7 @@ on:
       - master
     paths:
       # '*' matches any character except '/'
-      - 'jdk8/*'
+      - 'Dockerfile'
       - '.github/workflows/*'
 jobs:
   build:
@@ -22,7 +22,6 @@ jobs:
 
     - name: Build & Push Docker Image
       run: |
-        cd jdk8
         IMAGE_NAME=ringcentral/ads-executor
         VERSION="$(awk -F '[:]' '/FROM/ {print $2}' Dockerfile)"
         docker build --tag ${IMAGE_NAME} --file Dockerfile .
