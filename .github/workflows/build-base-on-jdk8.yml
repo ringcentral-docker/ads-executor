@@ -7,6 +7,7 @@ on:
     paths:
       # '*' matches any character except '/'
       - 'Dockerfile'
+      - 'libs/*'
       - '.github/workflows/*'
 jobs:
   build:
