@@ -10,7 +10,7 @@ ENV LD_LIBRARY_PATH=/opt/oracle/instantclient:$LD_LIBRARY_PATH \
 ARG INSTANTCLIENT_VERSION=12.2.0.1.0
 
 RUN apk update && apk upgrade \
-  && apk add --no-cache alpine-sdk python unzip git \
+  && apk add --no-cache alpine-sdk python2 unzip git \
   && mkdir /opt/oracle \
   && unzip /tmp/instantclient-basiclite-linux.x64-${INSTANTCLIENT_VERSION}.zip \
   && unzip /tmp/instantclient-sdk-linux.x64-${INSTANTCLIENT_VERSION}.zip \
