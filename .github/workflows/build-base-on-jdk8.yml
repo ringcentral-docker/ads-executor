@@ -18,11 +18,11 @@ jobs:
       env:
         DOCKER_HUB_USERNAME: ${{ secrets. DOCKER_HUB_USERNAME }} 
         DOCKER_HUB_PASSWORD: ${{ secrets. DOCKER_HUB_PASSWORD }}
-        GH_DOCKER_PKG_TOKEN: ${{ secrets. GH_DOCKER_PKG_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GH_DOCKER_PKG_USERNAME: ${{ secrets. GH_DOCKER_PKG_USERNAME }}
       run: |
         echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
-        echo $GH_DOCKER_PKG_TOKEN | docker login docker.pkg.github.com --username $GH_DOCKER_PKG_USERNAME --password-stdin
+        echo $GITHUB_TOKEN | docker login docker.pkg.github.com --username $GH_DOCKER_PKG_USERNAME --password-stdin
 
     - name: Build & Push Docker Image
       run: |
