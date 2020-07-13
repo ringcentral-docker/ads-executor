@@ -16,17 +16,32 @@ jobs:
     - uses: actions/checkout@master
     - name: Docker login
       env:
-        USER_NAME: ${{ secrets.USER_NAME }}  
-        PASSWORD: ${{ secrets.PASSWORD }}
+        DOCKER_HUB_USERNAME: ${{ secrets. DOCKER_HUB_USERNAME }} 
+        DOCKER_HUB_PASSWORD: ${{ secrets. DOCKER_HUB_PASSWORD }}
+        GH_DOCKER_PKG_TOKEN: ${{ secrets. GH_DOCKER_PKG_TOKEN }}
+        GH_DOCKER_PKG_USERNAME: ${{ secrets. GH_DOCKER_PKG_USERNAME }}
       run: |
-        echo $PASSWORD | docker login --username $USER_NAME --password-stdin
+        echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+        echo $GH_DOCKER_PKG_TOKEN | docker login docker.pkg.github.com --username $GH_DOCKER_PKG_USERNAME --password-stdin
 
     - name: Build & Push Docker Image
       run: |
-        IMAGE_NAME=ringcentral/ads-executor
+        IMAGE_NAME=ads-executor
+        DOCKER_HUB_PREFIX=ringcentral
+        GH_DOCKER_PKG_PREFIX=docker.pkg.github.com/ringcentral-docker
+
         VERSION="$(awk -F '[:]' '/FROM/ {print $2}' Dockerfile)"
+
         docker build --tag ${IMAGE_NAME} --file Dockerfile .
-        docker tag "${IMAGE_NAME}" "${IMAGE_NAME}:latest"
-        docker tag "${IMAGE_NAME}" "${IMAGE_NAME}:${VERSION}"
-        docker push "${IMAGE_NAME}:${VERSION}"
-        docker push "${IMAGE_NAME}:latest"
+
+        docker tag "${IMAGE_NAME}" "${DOCKER_HUB_PREFIX}/${IMAGE_NAME}:latest"
+        docker tag "${IMAGE_NAME}" "${DOCKER_HUB_PREFIX}/${IMAGE_NAME}:${VERSION}"
+
+        docker push "${DOCKER_HUB_PREFIX}/${IMAGE_NAME}:latest"
+        docker push "${DOCKER_HUB_PREFIX}/${IMAGE_NAME}:${VERSION}"
+
+        docker tag "${IMAGE_NAME}" "${GH_DOCKER_PKG_PREFIX}/${IMAGE_NAME}:latest"
+        docker tag "${IMAGE_NAME}" "${GH_DOCKER_PKG_PREFIX}/${IMAGE_NAME}:${VERSION}"
+
+        docker push "${GH_DOCKER_PKG_PREFIX}/${IMAGE_NAME}:latest"
+        docker push "${GH_DOCKER_PKG_PREFIX}/${IMAGE_NAME}:${VERSION}"
