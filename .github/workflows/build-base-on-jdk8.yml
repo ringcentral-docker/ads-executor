@@ -26,19 +26,18 @@ jobs:
 
     - name: Build & Push Docker Image
       run: |
-        IMAGE_NAME=ads-executor
-        DOCKER_HUB_PREFIX=ringcentral
+        IMAGE_NAME=ringcentral/ads-executor
         GH_DOCKER_PKG_PREFIX=docker.pkg.github.com/ringcentral-docker
 
         VERSION="$(awk -F '[:]' '/FROM/ {print $2}' Dockerfile)"
 
         docker build --tag ${IMAGE_NAME} --file Dockerfile .
 
-        docker tag "${IMAGE_NAME}" "${DOCKER_HUB_PREFIX}/${IMAGE_NAME}:latest"
-        docker tag "${IMAGE_NAME}" "${DOCKER_HUB_PREFIX}/${IMAGE_NAME}:${VERSION}"
+        docker tag "${IMAGE_NAME}" "${IMAGE_NAME}:latest"
+        docker tag "${IMAGE_NAME}" "${IMAGE_NAME}:${VERSION}"
 
-        docker push "${DOCKER_HUB_PREFIX}/${IMAGE_NAME}:latest"
-        docker push "${DOCKER_HUB_PREFIX}/${IMAGE_NAME}:${VERSION}"
+        docker push "${IMAGE_NAME}:${VERSION}"
+        docker push "${IMAGE_NAME}:latest"
 
         docker tag "${IMAGE_NAME}" "${GH_DOCKER_PKG_PREFIX}/${IMAGE_NAME}:latest"
         docker tag "${IMAGE_NAME}" "${GH_DOCKER_PKG_PREFIX}/${IMAGE_NAME}:${VERSION}"
