@@ -19,15 +19,15 @@ jobs:
         DOCKER_HUB_USERNAME: ${{ secrets. DOCKER_HUB_USERNAME }} 
         DOCKER_HUB_PASSWORD: ${{ secrets. DOCKER_HUB_PASSWORD }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GH_DOCKER_PKG_USERNAME: ${{ secrets. GH_DOCKER_PKG_USERNAME }}
+        
       run: |
         echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
-        echo $GITHUB_TOKEN | docker login docker.pkg.github.com --username $GH_DOCKER_PKG_USERNAME --password-stdin
+        echo $GITHUB_TOKEN | docker login docker.pkg.github.com --username $GITHUB_ACTOR --password-stdin
 
     - name: Build & Push Docker Image
       run: |
         IMAGE_NAME=ringcentral/ads-executor
-        GH_DOCKER_PKG_PREFIX=docker.pkg.github.com/ringcentral-docker
+        GH_DOCKER_PKG_PREFIX=docker.pkg.github.com/ringcentral-docker/ads-executor
 
         VERSION="$(awk -F '[:]' '/FROM/ {print $2}' Dockerfile)"
 
