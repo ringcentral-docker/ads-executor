@@ -1,4 +1,4 @@
-name: Build base on JDK 8
+name: Build base on Node 12
 
 on:
   push:
@@ -7,7 +7,6 @@ on:
     paths:
       # '*' matches any character except '/'
       - 'Dockerfile'
-      - 'libs/*'
       - '.github/workflows/*'
 jobs:
   build:
