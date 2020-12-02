@@ -5,6 +5,7 @@ WORKDIR /tmp
 RUN apt-get update && apt-get -y upgrade && apt-get -y dist-upgrade && apt-get install -y alien libaio1 wget apt-transport-https gnupg
 
 # install adoptopenjdk 8
+RUN mkdir -p /usr/share/man/man1
 RUN wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | apt-key add -
 RUN echo "deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb buster main" | tee /etc/apt/sources.list.d/adoptopenjdk.list
 RUN apt-get update && apt-get install -y adoptopenjdk-8-openj9
