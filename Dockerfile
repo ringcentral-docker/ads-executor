@@ -6,7 +6,7 @@ RUN apt-get update && apt-get -y upgrade && apt-get -y dist-upgrade && apt-get i
 
 # install adoptopenjdk 8
 RUN wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | apt-key add -
-RUN echo "deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb buster main" | sudo tee /etc/apt/sources.list.d/adoptopenjdk.list
+RUN echo "deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb buster main" | tee /etc/apt/sources.list.d/adoptopenjdk.list
 RUN apt-get update && apt-get install -y adoptopenjdk-8-openj9
 
 # install oracle-instantclient
