@@ -16,5 +16,4 @@ RUN alien -i --scripts oracle-instantclient*.rpm
 RUN rm -f oracle-instantclient19.3*.rpm && apt-get -y autoremove && apt-get -y clean
 
 RUN java -version \
-&& sqlplus -V \
 && node -v
