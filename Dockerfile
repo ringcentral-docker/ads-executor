@@ -5,13 +5,18 @@ WORKDIR /tmp
 RUN apt-get update \
   && apt-get -y upgrade \
   && apt-get -y dist-upgrade \
-  && apt-get install -y alien libaio1 wget apt-transport-https gnupg python3 python3-pip python3-dev git subversion mercurial sshpass maven
+  && apt-get install -y alien libaio1 wget apt-transport-https gnupg python3 python3-pip python3-dev git subversion mercurial sshpass
 
 # install adoptopenjdk 8
 RUN mkdir -p /usr/share/man/man1
 RUN wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | apt-key add -
 RUN echo "deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb buster main" | tee /etc/apt/sources.list.d/adoptopenjdk.list
 RUN apt-get update && apt-get install -y adoptopenjdk-8-openj9
+
+
+# maven
+RUN apt-get update \
+  && apt-get install -y maven
 
 # install oracle-instantclient
 RUN wget https://yum.oracle.com/repo/OracleLinux/OL7/oracle/instantclient/x86_64/getPackage/oracle-instantclient19.3-basiclite-19.3.0.0.0-1.x86_64.rpm
