@@ -5,7 +5,7 @@ WORKDIR /tmp
 RUN apt-get update \
   && apt-get -y upgrade \
   && apt-get -y dist-upgrade \
-  && apt-get install -y alien libaio1 wget apt-transport-https gnupg python3 python3-pip python3-dev git subversion mercurial
+  && apt-get install -y alien libaio1 wget apt-transport-https gnupg python3 python3-pip python3-dev git subversion mercurial sshpass
 
 # install adoptopenjdk 8
 RUN mkdir -p /usr/share/man/man1
