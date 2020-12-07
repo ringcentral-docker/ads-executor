@@ -8,7 +8,9 @@ RUN apt-get update \
   && apt-get install -y alien libaio1 wget apt-transport-https gnupg python3 python3-pip python3-dev git subversion mercurial sshpass bash
 
 # set bash shell as default shell
-RUN chsh -s /bin/bash && rm /bin/sh ln -s /bin/bash /bin/sh
+RUN chsh -s /bin/bash \
+  && rm -f /bin/sh \
+  && ln -s /bin/bash /bin/sh
 
 # install adoptopenjdk 8
 RUN mkdir -p /usr/share/man/man1
