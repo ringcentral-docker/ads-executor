@@ -1,0 +1,39 @@
+name: Build base on Node 14
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      # '*' matches any character except '/'
+      - '14-bullseye/*'
+      - '.github/workflows/build-node14.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Docker login
+      env:
+        DOCKER_HUB_USERNAME: ${{ secrets. DOCKER_HUB_USERNAME }} 
+        DOCKER_HUB_PASSWORD: ${{ secrets. DOCKER_HUB_PASSWORD }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+      run: |
+        echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+        echo $GITHUB_TOKEN | docker login docker.pkg.github.com --username $GITHUB_ACTOR --password-stdin
+
+    - name: Build & Push Docker Image
+      run: |
+        cd 14-bullseye
+        IMAGE_NAME=ringcentral/ads-executor
+        GH_DOCKER_PKG_IMAGE_NAME=docker.pkg.github.com/ringcentral-docker/ads-executor/ads-executor
+
+        VERSION="$(awk -F '[:]' '/FROM/ {print $2}' Dockerfile)"
+
+        docker build --tag ${IMAGE_NAME} --file Dockerfile .
+
+        docker tag "${IMAGE_NAME}" "${IMAGE_NAME}:${VERSION}"
+        docker push "${IMAGE_NAME}:${VERSION}"
+        docker tag "${IMAGE_NAME}" "${GH_DOCKER_PKG_IMAGE_NAME}:${VERSION}"
+        docker push "${GH_DOCKER_PKG_IMAGE_NAME}:${VERSION}"

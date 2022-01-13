@@ -1,4 +1,4 @@
-FROM node:12-buster-slim
+FROM node:14-bullseye-slim
 
 WORKDIR /tmp
 
@@ -15,7 +15,7 @@ RUN chsh -s /bin/bash \
 # install adoptopenjdk 8
 RUN mkdir -p /usr/share/man/man1
 RUN wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | apt-key add -
-RUN echo "deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb buster main" | tee /etc/apt/sources.list.d/adoptopenjdk.list
+RUN echo "deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb bullseye main" | tee /etc/apt/sources.list.d/adoptopenjdk.list
 RUN apt-get update && apt-get install -y adoptopenjdk-8-openj9
 
 
@@ -24,9 +24,9 @@ RUN apt-get update \
   && apt-get install -y maven
 
 # install oracle-instantclient
-RUN wget https://yum.oracle.com/repo/OracleLinux/OL7/oracle/instantclient/x86_64/getPackage/oracle-instantclient19.3-basiclite-19.3.0.0.0-1.x86_64.rpm
+RUN wget https://yum.oracle.com/repo/OracleLinux/OL7/oracle/instantclient/x86_64/getPackage/oracle-instantclient19.13-basiclite-19.13.0.0.0-2.x86_64.rpm
 RUN alien -i --scripts oracle-instantclient*.rpm
-RUN rm -f oracle-instantclient19.3*.rpm && apt-get -y autoremove && apt-get -y clean
+RUN rm -f oracle-instantclient19*.rpm && apt-get -y autoremove && apt-get -y clean
 
 RUN java -version \
   && node -v

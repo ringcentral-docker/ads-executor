@@ -6,8 +6,8 @@ on:
       - master
     paths:
       # '*' matches any character except '/'
-      - 'Dockerfile'
-      - '.github/workflows/*'
+      - '12-bullseye/*'
+      - '.github/workflows/build-node12.yml'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,6 +25,7 @@ jobs:
 
     - name: Build & Push Docker Image
       run: |
+        cd 12-bullseye
         IMAGE_NAME=ringcentral/ads-executor
         GH_DOCKER_PKG_IMAGE_NAME=docker.pkg.github.com/ringcentral-docker/ads-executor/ads-executor
 
@@ -32,14 +33,13 @@ jobs:
 
         docker build --tag ${IMAGE_NAME} --file Dockerfile .
 
-        docker tag "${IMAGE_NAME}" "${IMAGE_NAME}:latest"
         docker tag "${IMAGE_NAME}" "${IMAGE_NAME}:${VERSION}"
-
         docker push "${IMAGE_NAME}:${VERSION}"
-        docker push "${IMAGE_NAME}:latest"
-
-        docker tag "${IMAGE_NAME}" "${GH_DOCKER_PKG_IMAGE_NAME}:latest"
         docker tag "${IMAGE_NAME}" "${GH_DOCKER_PKG_IMAGE_NAME}:${VERSION}"
-
-        docker push "${GH_DOCKER_PKG_IMAGE_NAME}:latest"
         docker push "${GH_DOCKER_PKG_IMAGE_NAME}:${VERSION}"
+
+
+        docker tag "${IMAGE_NAME}" "${IMAGE_NAME}:latest"
+        docker push "${IMAGE_NAME}:latest"
+        docker tag "${IMAGE_NAME}" "${GH_DOCKER_PKG_IMAGE_NAME}:latest"
+        docker push "${GH_DOCKER_PKG_IMAGE_NAME}:latest"
