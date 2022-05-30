@@ -1,4 +1,4 @@
-name: Build base on Node 12
+name: Build base on Node 16
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
       - master
     paths:
       # '*' matches any character except '/'
-      - '12-bullseye/*'
-      - '.github/workflows/build-node12.yml'
+      - '16-bullseye/*'
+      - '.github/workflows/build-node16.yml'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,7 +25,7 @@ jobs:
 
     - name: Build & Push Docker Image
       run: |
-        cd 12-bullseye
+        cd 16-bullseye
         IMAGE_NAME=ringcentral/ads-executor
         GH_DOCKER_PKG_IMAGE_NAME=docker.pkg.github.com/ringcentral-docker/ads-executor/ads-executor
 
@@ -37,3 +37,8 @@ jobs:
         docker push "${IMAGE_NAME}:${VERSION}"
         docker tag "${IMAGE_NAME}" "${GH_DOCKER_PKG_IMAGE_NAME}:${VERSION}"
         docker push "${GH_DOCKER_PKG_IMAGE_NAME}:${VERSION}"
+
+        docker tag "${IMAGE_NAME}" "${IMAGE_NAME}:latest"
+        docker push "${IMAGE_NAME}:latest"
+        docker tag "${IMAGE_NAME}" "${GH_DOCKER_PKG_IMAGE_NAME}:latest"
+        docker push "${GH_DOCKER_PKG_IMAGE_NAME}:latest"
