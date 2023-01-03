@@ -6,7 +6,7 @@ on:
       - master
     paths:
       # '*' matches any character except '/'
-      - '16-bullseye/*'
+      - '16-buster/*'
       - '.github/workflows/build-node16.yml'
 jobs:
   build:
@@ -25,7 +25,7 @@ jobs:
 
     - name: Build & Push Docker Image
       run: |
-        cd 16-bullseye
+        cd 16-buster
         IMAGE_NAME=ringcentral/ads-executor
         GH_DOCKER_PKG_IMAGE_NAME=docker.pkg.github.com/ringcentral-docker/ads-executor/ads-executor
 

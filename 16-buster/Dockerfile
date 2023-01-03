@@ -1,4 +1,4 @@
-FROM node:14-bullseye-slim
+FROM node:16-buster-slim
 
 WORKDIR /tmp
 
@@ -12,11 +12,11 @@ RUN chsh -s /bin/bash \
   && rm -f /bin/sh \
   && ln -s /bin/bash /bin/sh
 
-# install adoptopenjdk 8
+# install adopt openjdk 11
 RUN mkdir -p /usr/share/man/man1
-RUN wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | apt-key add -
-RUN echo "deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb bullseye main" | tee /etc/apt/sources.list.d/adoptopenjdk.list
-RUN apt-get update && apt-get install -y adoptopenjdk-8-openj9
+RUN wget -qO - https://packages.adoptium.net/artifactory/api/gpg/key/public | apt-key add -
+RUN echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list
+RUN apt-get update && apt-get install -y temurin-11-jdk
 
 
 # maven
